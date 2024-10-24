@@ -1,26 +1,23 @@
 class ContentCardExample extends HTMLElement {
     // Whenever the state changes, a new `hass` object is set. Use this to
     // update your content.
-    static getConfigElement() {
-        return document.createElement("content-card-editor");
-    }
-    static getStubConfig() {
-        return { entity: "sun.sun" }
-    }
+
     set hass(hass) {
         // Initialize the content if it's not there yet.
+        const entityId = this.config.entity;
+        const state = hass.states[entityId];
+        const stateStr = state ? state.state : "unavailable";
+
+        const icon = state.attributes["icon"];
         if (!this.content) {
             this.innerHTML = `
         <ha-card header="Prueba 123">
+          <ha-icon icon="${icon}"></ha-icon>
           <div class="card-content"></div>
         </ha-card>
       `;
             this.content = this.querySelector("div");
         }
-
-        const entityId = this.config.entity;
-        const state = hass.states[entityId];
-        const stateStr = state ? state.state : "unavailable";
 
         this.content.innerHTML = `
       El estado de ${entityId} es ${stateStr}!
@@ -32,7 +29,12 @@ class ContentCardExample extends HTMLElement {
       </div>
     `;
     }
-
+    static getConfigElement() {
+        return document.createElement("content-card-editor");
+    }
+    static getStubConfig() {
+        return { entity: "sun.sun" }
+    }
     // The user supplied configuration. Throw an exception and Home Assistant
     // will render an error card.
     setConfig(config) {
