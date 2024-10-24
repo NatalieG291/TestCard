@@ -11,7 +11,7 @@ class ContentCardExample extends HTMLElement {
         // Initialize the content if it's not there yet.
         if (!this.content) {
             this.innerHTML = `
-        <ha-card header="Prueba">
+        <ha-card header="Prueba 123">
           <div class="card-content"></div>
         </ha-card>
       `;
