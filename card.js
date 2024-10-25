@@ -10,6 +10,10 @@ class ContentCardExample extends HTMLElement {
 
         const currentCourse = state.attributes["run_state"] || state.entity_id;;
         const friendlyName = state.attributes["friendly_name"] || state.entity_id;
+        const temp = state.attributes["water_temp"] || state.entity_id;
+        if (temp == 'Sin seleccionar') {
+            temp == '-';
+        }
         const icon = state.attributes["icon"];
         if (!this.content) {
             this.innerHTML = `
@@ -31,7 +35,7 @@ class ContentCardExample extends HTMLElement {
                                         Temperatura
                                     </li>
                                     <li style="vertical-align: middle; text-align: center;">
-                                        <strong>${state.attributes["water_temp"]}</strong>
+                                        <strong>${temp}</strong>
                                     </li>
                                 </ul>
                                 <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
@@ -95,7 +99,7 @@ class ContentCardExample extends HTMLElement {
             `;
             this.querySelector(".main").style.display = "grid";
             this.querySelector(".main").style.gridTemplateColumns = "33% 64%";
-            this.querySelector("ha-icon").style.setProperty("--mdc-icon-size", "50%");
+            this.querySelector("ha-icon").style.setProperty("--mdc-icon-size", "95%");
         }
         if (state.state == "on") {
             const totalTime = state.attributes["initial_time"];
