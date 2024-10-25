@@ -25,7 +25,13 @@ class ContentCardExample extends HTMLElement {
                 </ha-card>
             `;
             this.content = this.querySelector("div");
-            this.querySelector("ha-icon").style.setProperty("--mdc-icon-size", "95%");
+            this.querySelector("ha-icon").style.setProperty("--mdc-icon-size", "50%");
+        }
+        if (state.state == "on") {
+            this.querySelector("ha-icon").style.color = "#c290ff";
+        }
+        else {
+            this.querySelector("ha-icon").style.color = "#5e467b";
         }
 
         //this.content.innerHTML = ``;
