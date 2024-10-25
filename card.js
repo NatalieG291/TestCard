@@ -8,10 +8,11 @@ class ContentCardExample extends HTMLElement {
         const state = hass.states[entityId];
         const stateStr = state ? state.state : "unavailable";
 
+        const friendlyName = state.attributes["friendly_name"] || state.entity_id;
         const icon = state.attributes["icon"];
         if (!this.content) {
             this.innerHTML = `
-                <ha-card header="Prueba 123">
+                <ha-card header="${friendlyName}">
                     <ha-icon icon="${icon}"></ha-icon>
                     <div class="card-content">
                         El estado de ${entityId} es ${stateStr}!
