@@ -16,7 +16,70 @@ class ContentCardExample extends HTMLElement {
                 <ha-card header="${friendlyName}">
                     <ha-icon icon="${icon}"></ha-icon>
                     <div class="card-content">
-                        El estado de ${entityId} es ${stateStr}!
+                        <div style="padding: 5px;">
+                            <span style="font: normal normal 20px Roboto,sans-serif !important;">
+                              Ciclo actual <strong>${state.attributes["current_course"]}</strong> | ${state.attributes["run_state"]}
+                            </span>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <ha-icon icon="mdi:water-thermometer"></ha-icon>
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">
+                                    Temperatura
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <strong>${state.attributes["water_temp"]}</strong>
+                                </li>
+                            </ul>
+                            <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <ha-icon icon="mdi:waves"></ha-icon>
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">
+                                    Enjuague
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <strong>${state.attributes["rinse_mode"]}</strong>
+                                </li>
+                            </ul>
+                            <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <ha-icon icon="mdi:weather-hurricane"></ha-icon>
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">
+                                    Centrifugado
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <strong>${state.attributes["spin_speed"]}</strong>
+                                </li>
+                            </ul>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <ha-icon icon="mdi:water-opacity"></ha-icon>
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">
+                                    Pre-Lavado
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <strong>${state.attributes["pre_wash"]}</strong>
+                                </li>
+                            </ul>
+                            <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <ha-icon icon="mdi:weather-windy"></ha-icon>
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">
+                                    Secado
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <strong>${state.attributes["dry_level"]}</strong>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="progress-wrapper" style="height: 20px; width: 100%; border-radius: 10px 10px 10px 10px;">
                             <div class="progress" style="display: inline-block; height: 20px; border-radius: 10px 10px 10px 10px;">
                             </div>
