@@ -8,7 +8,7 @@ class ContentCardExample extends HTMLElement {
         const state = hass.states[entityId];
         const stateStr = state ? state.state : "unavailable";
 
-        const currentCourse = state.attributes["current_course"];
+        const currentCourse = state.attributes["current_course"] || state.entity_id;;
         const friendlyName = state.attributes["friendly_name"] || state.entity_id;
         const icon = state.attributes["icon"];
         if (!this.content) {
