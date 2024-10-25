@@ -15,7 +15,7 @@ class ContentCardExample extends HTMLElement {
             this.innerHTML = `
                 <ha-card header="${friendlyName}">
                     <ha-icon icon="${icon}"></ha-icon>
-                    <div class="card-content">
+                    <div class="card-content" style="display: grid">
                         <div style="padding: 5px;">
                             <span style="font: normal normal 20px Roboto,sans-serif !important;">
                               Ciclo actual <strong>${state.attributes["current_course"]}</strong> | ${state.attributes["run_state"]}
