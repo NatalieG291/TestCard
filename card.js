@@ -106,7 +106,7 @@ class ContentCardExample extends HTMLElement {
             this.querySelector(".progress-wrapper").style.backgroundColor = "#5e467b";
             this.querySelector(".progress").style.backgroundColor = "#c290ff";
             if (temp == 'Sin seleccionar') {
-                this.querySelector(".temp strong").innerHTML = '-';
+                this.querySelector(".temp span").innerHTML = '-';
             }
             if (runState == 'Reposo') {
                 this.querySelector(".progress-wrapper span").innerHTML = 'En espera';
