@@ -8,6 +8,7 @@ class ContentCardExample extends HTMLElement {
         const state = hass.states[entityId];
         const stateStr = state ? state.state : "unavailable";
 
+        const currentCourse = state.attributes["current_course"];
         const friendlyName = state.attributes["friendly_name"] || state.entity_id;
         const icon = state.attributes["icon"];
         if (!this.content) {
@@ -37,8 +38,14 @@ class ContentCardExample extends HTMLElement {
             const remainMinutes = (parseInt(remainTime.split(":")[0]) * 60) + parseInt(remainTime.split(":")[1]);
             this.querySelector(".progress-wrapper").style.backgroundColor = "#5e467b";
             this.querySelector(".progress").style.backgroundColor = "#c290ff";
-            this.querySelector(".progress").style.width = (totalMinutes - remainMinutes) / totalMinutes * 100 + "%";
-            this.querySelector(".progress-wrapper span").innerHTML = Math.round((totalMinutes - remainMinutes) / totalMinutes * 100) + "%";
+            if (currentCourse == 'Reposo') {
+                this.querySelector(".progress-wrapper span").innerHTML = 'En espera';
+            }
+            else {
+                this.querySelector(".progress").style.width = (totalMinutes - remainMinutes) / totalMinutes * 100 + "%";
+                this.querySelector(".progress-wrapper span").innerHTML = Math.round((totalMinutes - remainMinutes) / totalMinutes * 100) + "%";
+            }
+
             this.querySelector("ha-icon").style.color = "#c290ff";
         }
         else {
