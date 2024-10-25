@@ -8,12 +8,9 @@ class ContentCardExample extends HTMLElement {
         const state = hass.states[entityId];
         const stateStr = state ? state.state : "unavailable";
 
-        const currentCourse = state.attributes["run_state"] || state.entity_id;;
+        const runState = state.attributes["run_state"] || state.entity_id;;
         const friendlyName = state.attributes["friendly_name"] || state.entity_id;
         const temp = state.attributes["water_temp"] || state.entity_id;
-        if (temp == 'Sin seleccionar') {
-            temp == '-';
-        }
         const icon = state.attributes["icon"];
         if (!this.content) {
             this.innerHTML = `
@@ -34,7 +31,7 @@ class ContentCardExample extends HTMLElement {
                                     <li style="vertical-align: middle; text-align: center;">
                                         Temperatura
                                     </li>
-                                    <li style="vertical-align: middle; text-align: center;">
+                                    <li class="temp" style="vertical-align: middle; text-align: center;">
                                         <strong>${temp}</strong>
                                     </li>
                                 </ul>
@@ -108,7 +105,10 @@ class ContentCardExample extends HTMLElement {
             const remainMinutes = (parseInt(remainTime.split(":")[0]) * 60) + parseInt(remainTime.split(":")[1]);
             this.querySelector(".progress-wrapper").style.backgroundColor = "#5e467b";
             this.querySelector(".progress").style.backgroundColor = "#c290ff";
-            if (currentCourse == 'Reposo') {
+            if (temp == 'Sin seleccionar') {
+                this.querySelector(".temp strong").innerHTML = '-';
+            }
+            if (runState == 'Reposo') {
                 this.querySelector(".progress-wrapper span").innerHTML = 'En espera';
             }
             else {
