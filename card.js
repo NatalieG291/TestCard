@@ -11,23 +11,24 @@ class ContentCardExample extends HTMLElement {
         const icon = state.attributes["icon"];
         if (!this.content) {
             this.innerHTML = `
-        <ha-card header="Prueba 123">
-          <ha-icon icon="${icon}"></ha-icon>
-          <div class="card-content"></div>
-        </ha-card>
-      `;
+                <ha-card header="Prueba 123">
+                    <ha-icon icon="${icon}"></ha-icon>
+                    <div class="card-content">
+                        El estado de ${entityId} es ${stateStr}!
+                        <br><br>
+                        <div class="progress-wrapper" style="height: 20px; width: 100%; border-radius: 10px 10px 10px 10px;">
+                            <div class="progress" style="display: inline-block; height: 20px; border-radius: 10px 10px 10px 10px;">
+                            </div>
+                            <span style="color: #FFFFFF; position: absolute; right: 33%;">50%</span>
+                        </div>
+                    </div>
+                </ha-card>
+            `;
             this.content = this.querySelector("div");
+            this.querySelector("ha-icon").style.setProperty("--mdc-icon-size", "95%");
         }
 
-        this.content.innerHTML = `
-      El estado de ${entityId} es ${stateStr}!
-      <br><br>
-      <div class="progress-wrapper" style="height: 20px; width: 100%; border-radius: 10px 10px 10px 10px;">
-        <div class="progress" style="display: inline-block; height: 20px; border-radius: 10px 10px 10px 10px;">
-        </div>
-        <span style="color: #FFFFFF; position: absolute; right: 33%;">50%</span>
-      </div>
-    `;
+        //this.content.innerHTML = ``;
     }
     static getConfigElement() {
         return document.createElement("content-card-editor");
