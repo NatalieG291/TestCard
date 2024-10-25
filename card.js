@@ -15,7 +15,6 @@ class ContentCardExample extends HTMLElement {
                     <ha-icon icon="${icon}"></ha-icon>
                     <div class="card-content">
                         El estado de ${entityId} es ${stateStr}!
-                        <br><br>
                         <div class="progress-wrapper" style="height: 20px; width: 100%; border-radius: 10px 10px 10px 10px;">
                             <div class="progress" style="display: inline-block; height: 20px; border-radius: 10px 10px 10px 10px;">
                             </div>
