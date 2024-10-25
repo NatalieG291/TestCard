@@ -21,6 +21,9 @@ class ContentCardExample extends HTMLElement {
                             </div>
                             <span style="color: #FFFFFF; position: absolute; right: 33%;">50%</span>
                         </div>
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <span><strong>${state.attributes["remain_time"]}</strong> para terminar</span>
+                        </div>
                     </div>
                 </ha-card>
             `;
@@ -28,6 +31,14 @@ class ContentCardExample extends HTMLElement {
             this.querySelector("ha-icon").style.setProperty("--mdc-icon-size", "50%");
         }
         if (state.state == "on") {
+            const totalTime = state.attributes["initial_time"];
+            const remainTime = state.attributes["remain_time"];
+            const totalMinutes = (parseInt(totalTime.split(":")[0]) * 60) + parseInt(totalTime.split(":")[1]);
+            const remainMinutes = (parseInt(remainTime.split(":")[0]) * 60) + parseInt(remainTime.split(":")[1]);
+            this.querySelector(".progress-wrapper").style.backgroundColor = "#5e467b";
+            this.querySelector(".progress").style.backgroundColor = "#c290ff";
+            this.querySelector(".progress").style.width = (totalMinutes - remainMinutes) / totalMinutes * 100 + "%";
+            this.querySelector(".progress-wrapper span").innerHTML = Math.round((totalMinutes - remainMinutes) / totalMinutes * 100) + "%";
             this.querySelector("ha-icon").style.color = "#c290ff";
         }
         else {
