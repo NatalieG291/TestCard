@@ -32,7 +32,7 @@ class ContentCardExample extends HTMLElement {
                                         Temperatura
                                     </li>
                                     <li class="temp" style="vertical-align: middle; text-align: center;">
-                                        <strong>${temp}</strong>
+                                        <span><strong>${temp}</strong></span>
                                     </li>
                                 </ul>
                                 <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
