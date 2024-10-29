@@ -18,7 +18,7 @@ class ContentCardExample extends HTMLElement {
                     <div class="main">
                         <ha-icon icon="${icon}"></ha-icon>
                         <div>
-                            <div style="padding: 5px;">
+                            <div class="estado" style="padding: 5px;">
                                 <span style="font: normal normal 20px Roboto,sans-serif !important;">
                                   Ciclo actual <strong>${state.attributes["current_course"]}</strong> | ${state.attributes["run_state"]}
                                 </span>
@@ -105,6 +105,7 @@ class ContentCardExample extends HTMLElement {
             const remainMinutes = (parseInt(remainTime.split(":")[0]) * 60) + parseInt(remainTime.split(":")[1]);
             this.querySelector(".progress-wrapper").style.backgroundColor = "#5e467b";
             this.querySelector(".progress").style.backgroundColor = "#c290ff";
+            this.querySelector(".estado span").innerHTML = 'Ciclo actual <strong>${state.attributes["current_course"]}</strong> | ${state.attributes["run_state"]}';
             if (temp == 'Sin seleccionar') {
                 this.querySelector(".temp span").innerHTML = '-';
             }
@@ -119,6 +120,7 @@ class ContentCardExample extends HTMLElement {
             this.querySelector("ha-icon").style.color = "#c290ff";
         }
         else {
+            this.querySelector(".estado span").innerHTML = 'Apagado';
             this.querySelector("ha-icon").style.color = "#5e467b";
         }
 
