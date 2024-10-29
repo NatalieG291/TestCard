@@ -217,6 +217,18 @@ class ContentCardExample extends HTMLElement {
                 if (errorMsg == 'dHE') {
                     errorDesc = 'hay un error de secado, llama a soporte tecnico.';
                 }
+                if (errorMsg == 'dE1') {
+                    errorDesc = 'Revisa el cierre correcto de la tapa.';
+                }
+                if (errorMsg == 'dE') {
+                    errorDesc = 'Revisa el cierre correcto de la tapa.';
+                }
+                if (errorMsg == 'dE2') {
+                    errorDesc = 'Revisa el cierre correcto de la tapa.';
+                }
+                if (errorMsg == 'dE4') {
+                    errorDesc = 'Revisa el cierre correcto de la tapa.';
+                }
             }
             // temp water
             if (temp == 'Sin seleccionar') {
