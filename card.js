@@ -105,7 +105,7 @@ class ContentCardExample extends HTMLElement {
             const remainMinutes = (parseInt(remainTime.split(":")[0]) * 60) + parseInt(remainTime.split(":")[1]);
             this.querySelector(".progress-wrapper").style.backgroundColor = "#5e467b";
             this.querySelector(".progress").style.backgroundColor = "#c290ff";
-            this.querySelector(".estado span").innerHTML = 'Ciclo actual <strong>'.${state.attributes["current_course"]}.'</strong> | '.${state.attributes["run_state"]};
+            this.querySelector(".estado span").innerHTML = 'Ciclo actual <strong>' + state.attributes["current_course"] + '</strong> | ' + state.attributes["run_state"];
             if (temp == 'Sin seleccionar') {
                 this.querySelector(".temp span").innerHTML = '-';
             }
