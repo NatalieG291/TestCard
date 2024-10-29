@@ -19,7 +19,7 @@ class ContentCardExample extends HTMLElement {
         const error = state.attributes["error_state"] || state.entity_id;
         const errorMsg = state.attributes["error_message"] || state.entity_id;
         const errorDesc = '';
-        const icon = state.attributes["icon"];
+        var icon = state.attributes["icon"];
         if (!this.content) {
             this.innerHTML = `
                 <ha-card>
