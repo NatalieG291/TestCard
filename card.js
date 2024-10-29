@@ -138,6 +138,7 @@ class ContentCardExample extends HTMLElement {
                 this.querySelector(".info").style.display = 'block';
             }
             else {
+                this.querySelector(".estado span").innerHTML = 'Ocurrio un problema';
                 this.querySelector(".error").style.display = 'block';
                 this.querySelector(".info").style.display = 'none';
                 this.querySelector(".error").style.color = 'white';
