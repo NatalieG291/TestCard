@@ -154,14 +154,26 @@ class ContentCardExample extends HTMLElement {
             this.querySelector(".progress-wrapper").style.backgroundColor = "#5e467b";
             this.querySelector(".progress").style.backgroundColor = "#c290ff";
             this.querySelector(".off").style.display = 'none';
+            this.querySelector(".error").style.display = 'none';
+            this.querySelector(".info").style.display = 'block';
+            icon = 'mdi:washing-machine';
 
-            // error
-            if (error == 'off') {
-                this.querySelector(".error").style.display = 'none';
-                this.querySelector(".info").style.display = 'block';
-                icon = 'mdi:washing-machine';
+            if (runState == 'Reposo') {
+                this.querySelector(".progress-wrapper span").innerHTML = 'En espera';
+                this.querySelector(".remaining span").style.display = 'none';
+                this.querySelector(".estado span").innerHTML = runState;
             }
             else {
+                this.querySelector(".estado span").innerHTML = 'Ciclo actual <strong>' + currentCourse + '</strong> | ' + runState;
+                this.querySelector(".progress").style.width = (totalMinutes - remainMinutes) / totalMinutes * 100 + "%";
+                this.querySelector(".progress-wrapper span").innerHTML = Math.round((totalMinutes - remainMinutes) / totalMinutes * 100) + "%";
+                this.querySelector(".remaining span").style.display = 'flex';
+                this.querySelector(".off").style.display = 'block';
+                this.querySelector(".info").style.display = 'none';
+            }
+
+            // error
+            if (error == 'on')  {
                 this.querySelector(".estado span").innerHTML = friendlyName + ' se detuvo por un problema';
                 this.querySelector(".error").style.display = 'block';
                 this.querySelector(".info").style.display = 'none';
@@ -242,20 +254,6 @@ class ContentCardExample extends HTMLElement {
                 this.querySelector(".dry span").innerHTML = '<strong>' + dry + '</strong>';
             }
 
-            if (runState == 'Reposo') {
-                this.querySelector(".progress-wrapper span").innerHTML = 'En espera';
-                this.querySelector(".remaining span").style.display = 'none';
-                this.querySelector(".estado span").innerHTML = runState;
-            }
-            else {
-                this.querySelector(".estado span").innerHTML = 'Ciclo actual <strong>' + currentCourse + '</strong> | ' + runState;
-                this.querySelector(".progress").style.width = (totalMinutes - remainMinutes) / totalMinutes * 100 + "%";
-                this.querySelector(".progress-wrapper span").innerHTML = Math.round((totalMinutes - remainMinutes) / totalMinutes * 100) + "%";
-                this.querySelector(".remaining span").style.display = 'flex';
-                this.querySelector(".off").style.display = 'block';
-                this.querySelector(".info").style.display = 'none';
-            }
-
             this.querySelector("ha-icon").style.color = "#c290ff";
         }
         else {
@@ -269,7 +267,8 @@ class ContentCardExample extends HTMLElement {
             this.querySelector(".remaining span").style.display = 'none';
             this.querySelector("ha-icon").style.color = "#5e467b";
             this.querySelector(".error").style.display = 'none';
-            this.querySelector('.info').style.display = 'block';
+            this.querySelector('.info').style.display = 'none';
+            this.querySelector(".off").style.display = 'block';
         }
 
         //this.content.innerHTML = ``;
