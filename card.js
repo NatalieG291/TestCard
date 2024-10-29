@@ -18,7 +18,7 @@ class ContentCardExample extends HTMLElement {
         const dry = state.attributes["dry_level"] || state.entity_id;
         const error = state.attributes["error_state"] || state.entity_id;
         const errorMsg = state.attributes["error_message"] || state.entity_id;
-        const errorDesc = '';
+        var errorDesc = '';
         var icon = state.attributes["icon"];
         if (!this.content) {
             this.innerHTML = `
