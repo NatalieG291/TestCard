@@ -47,7 +47,7 @@ class ContentCardExample extends HTMLElement {
                                         Enjuague
                                     </li>
                                     <li class="rinse" style="vertical-align: middle; text-align: center;">
-                                        <strong>${rinse}</strong>
+                                        <span><strong>${rinse}</strong></span>
                                     </li>
                                 </ul>
                                 <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
@@ -58,7 +58,7 @@ class ContentCardExample extends HTMLElement {
                                         Centrifugado
                                     </li>
                                     <li class="spin" style="vertical-align: middle; text-align: center;">
-                                        <strong>${spin}</strong>
+                                        <span><strong>${spin}</strong></span>
                                     </li>
                                 </ul>
                             </div>
@@ -71,7 +71,7 @@ class ContentCardExample extends HTMLElement {
                                         Pre-Lavado
                                     </li>
                                     <li class="pre" style="vertical-align: middle; text-align: center;">
-                                        <strong>${pre}</strong>
+                                        <span><strong>${pre}</strong></span>
                                     </li>
                                 </ul>
                                 <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
@@ -82,7 +82,7 @@ class ContentCardExample extends HTMLElement {
                                         Secado
                                     </li>
                                     <li class="dry" style="vertical-align: middle; text-align: center;">
-                                        <strong>${dry}</strong>
+                                        <span><strong>${dry}</strong></span>
                                     </li>
                                 </ul>
                             </div>
