@@ -15,13 +15,34 @@ class ContentCardExample extends HTMLElement {
         const spin = state.attributes["spin_speed"] || state.entity_id;
         const pre = state.attributes["pre_wash"] || state.entity_id;
         const dry = state.attributes["dry_level"] || state.entity_id;
+        const error = state.attributes["error_state"] || state.entity_id;
         const icon = state.attributes["icon"];
         if (!this.content) {
             this.innerHTML = `
                 <ha-card>
                     <div class="main">
                         <ha-icon icon="${icon}"></ha-icon>
-                        <div>
+                        <div class="error">
+                            <div class="estado" style="padding: 5px;">
+                                <span style="font: normal normal 20px Roboto,sans-serif !important;">
+                                  Ocurrio un problema
+                                </span>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: center;">
+                                <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
+                                    <li style="vertical-align: middle; text-align: center;">
+                                        <ha-icon icon="mdi:washing-machine-alert"></ha-icon>
+                                    </li>
+                                    <li style="vertical-align: middle; text-align: center;">
+                                        Codigo de error <strong>${error}</strong>
+                                    </li>
+                                    <li class="temp" style="vertical-align: middle; text-align: center;">
+                                        <span><strong>descripcion del error</strong></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="info">
                             <div class="estado" style="padding: 5px;">
                                 <span style="font: normal normal 20px Roboto,sans-serif !important;">
                                   Ciclo actual <strong>${state.attributes["current_course"]}</strong> | ${state.attributes["run_state"]}
@@ -110,6 +131,15 @@ class ContentCardExample extends HTMLElement {
             this.querySelector(".progress-wrapper").style.backgroundColor = "#5e467b";
             this.querySelector(".progress").style.backgroundColor = "#c290ff";
             this.querySelector(".estado span").innerHTML = 'Ciclo actual <strong>' + currentCourse + '</strong> | ' + runState;
+            // error
+            if (error == 'OK') {
+                this.querySelector("error").style.display = 'none';
+                this.querySelector("info").style.display = 'block';
+            }
+            else {
+                this.querySelector("error").style.display = 'block';
+                this.querySelector("info").style.display = 'none';
+            }
             // temp water
             if (temp == 'Sin seleccionar') {
                 this.querySelector(".temp span").innerHTML = '-';
