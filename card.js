@@ -26,7 +26,7 @@ class ContentCardExample extends HTMLElement {
                     <div class="main">
                         <ha-icon icon="${icon}"></ha-icon>
                         <div class="off">
-                            <div class="estado" style="padding: 5px;">
+                            <div class="estadoOff" style="padding: 5px;">
                                 <span style="font: normal normal 20px Roboto,sans-serif !important;">
                                   
                                 </span>
@@ -46,7 +46,7 @@ class ContentCardExample extends HTMLElement {
                             </div>
                         </div>
                         <div class="error">
-                            <div class="estado" style="padding: 5px;">
+                            <div class="estadoErr" style="padding: 5px;">
                                 <span style="font: normal normal 20px Roboto,sans-serif !important;">
                                   Ocurrio un problema
                                 </span>
@@ -168,13 +168,13 @@ class ContentCardExample extends HTMLElement {
                 this.querySelector(".progress").style.width = (totalMinutes - remainMinutes) / totalMinutes * 100 + "%";
                 this.querySelector(".progress-wrapper span").innerHTML = Math.round((totalMinutes - remainMinutes) / totalMinutes * 100) + "%";
                 this.querySelector(".remaining span").style.display = 'flex';
-                this.querySelector(".off").style.display = 'block';
-                this.querySelector(".info").style.display = 'none';
+                this.querySelector(".off").style.display = 'none';
+                this.querySelector(".info").style.display = 'block';
             }
 
             // error
             if (error == 'on')  {
-                this.querySelector(".estado span").innerHTML = friendlyName + ' se detuvo por un problema';
+                this.querySelector(".estadoErr span").innerHTML = friendlyName + ' se detuvo por un problema';
                 this.querySelector(".error").style.display = 'block';
                 this.querySelector(".info").style.display = 'none';
                 this.querySelector(".error").style.color = 'white';
