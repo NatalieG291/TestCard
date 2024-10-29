@@ -139,6 +139,7 @@ class ContentCardExample extends HTMLElement {
             else {
                 this.querySelector("error").style.display = 'block';
                 this.querySelector("info").style.display = 'none';
+                this.querySelector("error").style.color = 'white';
             }
             // temp water
             if (temp == 'Sin seleccionar') {
@@ -197,6 +198,8 @@ class ContentCardExample extends HTMLElement {
             this.querySelector(".dry").innerHTML = '-';
             this.querySelector(".remaining span").style.display = 'none';
             this.querySelector("ha-icon").style.color = "#5e467b";
+            this.querySelector("error").style.display = 'none';
+            this.querySelector('info').style.display = 'block';
         }
 
         //this.content.innerHTML = ``;
