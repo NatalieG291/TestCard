@@ -16,6 +16,7 @@ class ContentCardExample extends HTMLElement {
         const pre = state.attributes["pre_wash"] || state.entity_id;
         const dry = state.attributes["dry_level"] || state.entity_id;
         const error = state.attributes["error_state"] || state.entity_id;
+        const errorMsg = state.attributes["error_message"] || state.entity_id;
         const icon = state.attributes["icon"];
         if (!this.content) {
             this.innerHTML = `
@@ -34,9 +35,9 @@ class ContentCardExample extends HTMLElement {
                                         <ha-icon icon="mdi:washing-machine-alert"></ha-icon>
                                     </li>
                                     <li style="vertical-align: middle; text-align: center;">
-                                        Codigo de error <strong>${error}</strong>
+                                        Codigo de error <strong>${errorMsg}</strong>
                                     </li>
-                                    <li class="temp" style="vertical-align: middle; text-align: center;">
+                                    <li style="vertical-align: middle; text-align: center;">
                                         <span><strong>descripcion del error</strong></span>
                                     </li>
                                 </ul>
@@ -132,7 +133,7 @@ class ContentCardExample extends HTMLElement {
             this.querySelector(".progress").style.backgroundColor = "#c290ff";
             this.querySelector(".estado span").innerHTML = 'Ciclo actual <strong>' + currentCourse + '</strong> | ' + runState;
             // error
-            if (error == 'OK') {
+            if (error == 'off') {
                 this.querySelector(".error").style.display = 'none';
                 this.querySelector(".info").style.display = 'block';
             }
