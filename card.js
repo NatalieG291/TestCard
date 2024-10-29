@@ -56,10 +56,10 @@ class ContentCardExample extends HTMLElement {
                                     <li style="vertical-align: middle; text-align: center;">
                                         <span></span>
                                     </li>
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        Codigo de error <strong>${errorMsg}</strong>
+                                    <li class="errorMsg" style="vertical-align: middle; text-align: center;">
+                                        <span>Codigo de error <strong>${errorMsg}</strong></span>
                                     </li>
-                                    <li style="vertical-align: middle; text-align: center;">
+                                    <li class="errorDesc" style="vertical-align: middle; text-align: center;">
                                         <span><strong>${errorDesc}</strong></span>
                                     </li>
                                 </ul>
@@ -229,6 +229,9 @@ class ContentCardExample extends HTMLElement {
                 if (errorMsg == 'dE4') {
                     errorDesc = 'Revisa el cierre correcto de la tapa.';
                 }
+
+                this.querySelector(".errorMsg span").innerHTML = 'Codigo de error - <strong>' + errorMsg + '</strong>';
+                this.querySelector(".errorDesc span").innerHTML = errorDesc;
             }
             // temp water
             if (temp == 'Sin seleccionar') {
