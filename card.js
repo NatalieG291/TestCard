@@ -10,7 +10,6 @@ class ContentCardExample extends HTMLElement {
 
         const runState = state.attributes["run_state"] || state.entity_id;
         const currentCourse = state.attributes["current_course"] || state.entity_id;
-        const friendlyName = state.attributes["friendly_name"] || state.entity_id;
         const temp = state.attributes["water_temp"] || state.entity_id;
         const rinse = state.attributes["rinse_mode"] || state.entity_id;
         const spin = state.attributes["spin_speed"] || state.entity_id;
