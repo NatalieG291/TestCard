@@ -59,7 +59,7 @@ class ContentCardExample extends HTMLElement {
                                         Centrifugado
                                     </li>
                                     <li class="spin" style="vertical-align: middle; text-align: center;">
-                                        <strong>${speed}</strong>
+                                        <strong>${spin}</strong>
                                     </li>
                                 </ul>
                             </div>
