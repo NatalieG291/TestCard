@@ -115,35 +115,35 @@ class ContentCardExample extends HTMLElement {
                 this.querySelector(".temp span").innerHTML = '-';
             }
             else {
-                this.querySelector(".temp span").innerHTML = temp;
+                this.querySelector(".temp span").innerHTML = '<strong>' + temp + '</strong>';
             }
             // rinse mode
             if (rinse == 'Sin seleccionar') {
                 this.querySelector(".rinse span").innerHTML = '-';
             }
             else {
-                this.querySelector(".rinse span").innerHTML = rinse;
+                this.querySelector(".rinse span").innerHTML = '<strong>' + rinse + '</strong>';
             }
             // spin speed
             if (spin == 'Sin seleccionar') {
                 this.querySelector(".spin span").innerHTML = '-';
             }
             else {
-                this.querySelector(".spin span").innerHTML = spin;
+                this.querySelector(".spin span").innerHTML = '<strong>' + spin + '</strong>';
             }
             // pre wash
             if (pre == 'off') {
                 this.querySelector(".pre span").innerHTML = '-';
             }
             else {
-                this.querySelector(".pre span").innerHTML = pre;
+                this.querySelector(".pre span").innerHTML = '<strong>' + pre + '</strong>';
             }
             // dry level
             if (dry == 'Sin seleccionar') {
                 this.querySelector(".dry span").innerHTML = '-';
             }
             else {
-                this.querySelector(".dry span").innerHTML = dry;
+                this.querySelector(".dry span").innerHTML = '<strong>' + dry + '</strong>';
             }
 
             if (runState == 'Reposo') {
