@@ -7,6 +7,7 @@ class ContentCardExample extends HTMLElement {
         const entityId = this.config.entity;
         const state = hass.states[entityId];
         const stateStr = state ? state.state : "unavailable";
+        const friendlyName = state.attributes["friendly_name"] || state.entity_id;
 
         const runState = state.attributes["run_state"] || state.entity_id;
         const currentCourse = state.attributes["current_course"] || state.entity_id;
@@ -17,12 +18,33 @@ class ContentCardExample extends HTMLElement {
         const dry = state.attributes["dry_level"] || state.entity_id;
         const error = state.attributes["error_state"] || state.entity_id;
         const errorMsg = state.attributes["error_message"] || state.entity_id;
+        const errorDesc = '';
         const icon = state.attributes["icon"];
         if (!this.content) {
             this.innerHTML = `
                 <ha-card>
                     <div class="main">
                         <ha-icon icon="${icon}"></ha-icon>
+                        <div class="off">
+                            <div class="estado" style="padding: 5px;">
+                                <span style="font: normal normal 20px Roboto,sans-serif !important;">
+                                  
+                                </span>
+                            </div>
+                            <div style="display: flex; align-items: center; justify-content: center;">
+                                <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
+                                    <li style="vertical-align: middle; text-align: center;">
+                                        <span></span>
+                                    </li>
+                                    <li style="vertical-align: middle; text-align: center;">
+                                        <span style="font: normal normal 20px Roboto,sans-serif !important;><strong>Apagado</strong></span>
+                                    </li>
+                                    <li style="vertical-align: middle; text-align: center;">
+                                        <span></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                         <div class="error">
                             <div class="estado" style="padding: 5px;">
                                 <span style="font: normal normal 20px Roboto,sans-serif !important;">
@@ -32,13 +54,13 @@ class ContentCardExample extends HTMLElement {
                             <div style="display: flex; align-items: center; justify-content: center;">
                                 <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
                                     <li style="vertical-align: middle; text-align: center;">
-                                        <ha-icon icon="mdi:washing-machine-alert"></ha-icon>
+                                        <span></span>
                                     </li>
                                     <li style="vertical-align: middle; text-align: center;">
                                         Codigo de error <strong>${errorMsg}</strong>
                                     </li>
                                     <li style="vertical-align: middle; text-align: center;">
-                                        <span><strong>descripcion del error</strong></span>
+                                        <span><strong>${errorDesc}</strong></span>
                                     </li>
                                 </ul>
                             </div>
@@ -131,17 +153,58 @@ class ContentCardExample extends HTMLElement {
             const remainMinutes = (parseInt(remainTime.split(":")[0]) * 60) + parseInt(remainTime.split(":")[1]);
             this.querySelector(".progress-wrapper").style.backgroundColor = "#5e467b";
             this.querySelector(".progress").style.backgroundColor = "#c290ff";
-            this.querySelector(".estado span").innerHTML = 'Ciclo actual <strong>' + currentCourse + '</strong> | ' + runState;
+            this.querySelector(".off").style.display = 'none';
+
             // error
             if (error == 'off') {
                 this.querySelector(".error").style.display = 'none';
                 this.querySelector(".info").style.display = 'block';
+                icon = 'mdi:washing-machine';
             }
             else {
-                this.querySelector(".estado span").innerHTML = 'Ocurrio un problema';
+                this.querySelector(".estado span").innerHTML = friendlyName + ' se detuvo por un problema';
                 this.querySelector(".error").style.display = 'block';
                 this.querySelector(".info").style.display = 'none';
                 this.querySelector(".error").style.color = 'white';
+                icon = 'mdi:washing-machine-alert';
+
+                // codigos de error
+                if (errorMsg == 'IE') {
+                    errorDesc = 'La presión de agua no es suficiente, revisa el suministro de agua y que la manguera no esté obstruida.';
+                }
+                if (errorMsg == '0E') {
+                    errorDesc = 'El agua no se esta drenando correctamente o demasiado lento, revisa que la manguera de drenaje no este obstruida o torcida.';
+                }
+                if (errorMsg == 'UE') {
+                    errorDesc = 'hay un error de desequilibrio, la ropa podria estar demasiado humeda o la carga es demasiado pequeña, reorganiza la ropa, quita o agrega peso segun la ropa que estes lavando para equilibrar la carga.';
+                }
+                if (errorMsg == 'tE') {
+                    errorDesc = 'Hay un error de control, llama a soporte tecnico.';
+                }
+                if (errorMsg == 'LE') {
+                    errorDesc = 'El motor esta sobrecargado, espera 30 minutos hasta que el motor se enfrie y luego, reinicia el ciclo.';
+                }
+                if (errorMsg == 'FE') {
+                    errorDesc = 'Hay un error de derrame, la lavadora se esta llenando porque la valvula esta fallando, cierra la llave de agua, desenchufa la lavadora y llama a soporte tecnico.';
+                }
+                if (errorMsg == 'PE') {
+                    errorDesc = 'El sensor de nivel de agua no funciona correctamente, cierra la llave de agua, desenchufa la lavadora y llama a soporte tecnico.';
+                }
+                if(errorMsg == 'u5') {
+                    errorDesc = 'Hay un error en el sensor de vibracion, cierra la llave de agua, desenchufa la lavadora y llama a soporte tecnico.';
+                }
+                if (errorMsg == 'FF') {
+                    errorDesc = 'hay un fallo por congelacion, revisa si la manguera de agua o drenaje se encuentran congeladas, suministra agua caliente en el tambor para descongelar la manguera de drenaje y la bombra de drenaje. Cubre la manguera de drenaje con una toalla humeda y caliente.';
+                }
+                if (errorMsg == 'AE') {
+                    errorDesc = 'hay una fuga de agua, llama a soporte tecnico.';
+                }
+                if (errorMsg == 'PF') {
+                    errorDesc = 'Fallo por corte electrico, inicia nuevamente el ciclo que estabas ejecutando.';
+                }
+                if (errorMsg == 'dHE') {
+                    errorDesc = 'hay un error de secado, llama a soporte tecnico.';
+                }
             }
             // temp water
             if (temp == 'Sin seleccionar') {
@@ -182,17 +245,22 @@ class ContentCardExample extends HTMLElement {
             if (runState == 'Reposo') {
                 this.querySelector(".progress-wrapper span").innerHTML = 'En espera';
                 this.querySelector(".remaining span").style.display = 'none';
+                this.querySelector(".estado span").innerHTML = runState;
             }
             else {
+                this.querySelector(".estado span").innerHTML = 'Ciclo actual <strong>' + currentCourse + '</strong> | ' + runState;
                 this.querySelector(".progress").style.width = (totalMinutes - remainMinutes) / totalMinutes * 100 + "%";
                 this.querySelector(".progress-wrapper span").innerHTML = Math.round((totalMinutes - remainMinutes) / totalMinutes * 100) + "%";
                 this.querySelector(".remaining span").style.display = 'flex';
+                this.querySelector(".off").style.display = 'block';
+                this.querySelector(".info").style.display = 'none';
             }
 
             this.querySelector("ha-icon").style.color = "#c290ff";
         }
         else {
-            this.querySelector(".estado span").innerHTML = 'Apagado';
+            icon = 'mdi:washing-machine-off';
+            this.querySelector(".estado span").innerHTML = '';
             this.querySelector(".temp").innerHTML = '-';
             this.querySelector(".rinse").innerHTML = '-';
             this.querySelector(".spin").innerHTML = '-';
