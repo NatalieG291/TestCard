@@ -121,7 +121,7 @@ class ContentCardExample extends HTMLElement {
         }
         else {
             this.querySelector(".estado span").innerHTML = 'Apagado';
-            this.querySelector(".temp span").innerHTML = '-';
+            this.querySelector(".temp").innerHTML = '-';
             this.querySelector("ha-icon").style.color = "#5e467b";
         }
 
