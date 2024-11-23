@@ -130,14 +130,6 @@ class ContentCardExample extends HTMLElement {
                                     </li>
                                 </ul>
                             </div>
-/*                            <div class="progress-wrapper" style="height: 20px; width: 100%; border-radius: 10px 10px 10px 10px;">
-                                <div class="progress" style="display: inline-block; height: 20px; border-radius: 10px 10px 10px 10px;">
-                                </div>
-                                <span style="color: #FFFFFF; position: absolute; right: 33%;"></span>
-                            </div>
-                            <div class="remaining" style="display: flex; align-items: center; justify-content: center;">
-                                <span><strong></strong> para terminar</span>
-                            </div>*/
                         </div>
                     </div>
                 </ha-card>
