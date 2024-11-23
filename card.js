@@ -22,7 +22,7 @@ class ContentCardExample extends HTMLElement {
         var icon = state.attributes["icon"];
         if (!this.content) {
             this.innerHTML = `
-                <ha-card>
+                <ha-card style="background: rgba(51,40,77,0.3) !important;">
                     <div class="main">
                         <ha-icon icon="${icon}"></ha-icon>
                         <div class="off">
@@ -130,6 +130,14 @@ class ContentCardExample extends HTMLElement {
                                     </li>
                                 </ul>
                             </div>
+                            <div class="progress-wrapper" style="height: 20px; width: 100%; border-radius: 10px 10px 10px 10px;">
+                                <div class="progress" style="display: inline-block; height: 20px; border-radius: 10px 10px 10px 10px;">
+                                </div>
+                                <span style="color: #FFFFFF; position: absolute; right: 33%;"></span>
+                            </div>
+                            <div class="remaining" style="display: flex; align-items: center; justify-content: center;">
+                                <span><strong>${state.attributes["remain_time"]}</strong> para terminar</span>
+                            </div>
                         </div>
                     </div>
                 </ha-card>
@@ -139,28 +147,28 @@ class ContentCardExample extends HTMLElement {
             this.querySelector("ha-icon").style.setProperty("--mdc-icon-size", "95%");
         }
         if (state.state == "on") {
-/*            const totalTime = state.attributes["initial_time"];
+            const totalTime = state.attributes["initial_time"];
             const remainTime = state.attributes["remain_time"];
             const totalMinutes = (parseInt(totalTime.split(":")[0]) * 60) + parseInt(totalTime.split(":")[1]);
             const remainMinutes = (parseInt(remainTime.split(":")[0]) * 60) + parseInt(remainTime.split(":")[1]);
             const countdownTime = state.attributes["countdown_time"];
             this.querySelector(".progress-wrapper").style.backgroundColor = "#5e467b";
-            this.querySelector(".progress").style.backgroundColor = "#c290ff";*/
+            this.querySelector(".progress").style.backgroundColor = "#c290ff";
             this.querySelector(".off").style.display = 'none';
             this.querySelector(".error").style.display = 'none';
             this.querySelector(".info").style.display = 'block';
             icon = 'mdi:washing-machine';
 
             if (runState == 'Reposo') {
-                /*this.querySelector(".progress-wrapper span").innerHTML = 'En espera';*/
+                this.querySelector(".progress-wrapper span").innerHTML = 'En espera';
                 this.querySelector(".remaining span").style.display = 'none';
                 this.querySelector(".estado span").innerHTML = runState;
             }
             else {
                 this.querySelector(".estado span").innerHTML = 'Ciclo actual <strong>' + currentCourse + '</strong> | ' + runState;
-/*                this.querySelector(".progress").style.width = (totalMinutes - remainMinutes) / totalMinutes * 100 + "%";
-                this.querySelector(".progress-wrapper span").innerHTML = Math.round((totalMinutes - remainMinutes) / totalMinutes * 100) + "%";*/
-                /*this.querySelector(".remaining span").style.display = 'flex';*/
+                this.querySelector(".progress").style.width = (totalMinutes - remainMinutes) / totalMinutes * 100 + "%";
+                this.querySelector(".progress-wrapper span").innerHTML = Math.round((totalMinutes - remainMinutes) / totalMinutes * 100) + "%";
+                this.querySelector(".remaining span").style.display = 'flex';
                 this.querySelector(".off").style.display = 'none';
                 this.querySelector(".info").style.display = 'block';
             }
@@ -272,7 +280,7 @@ class ContentCardExample extends HTMLElement {
             this.querySelector(".spin").innerHTML = '-';
             this.querySelector(".pre").innerHTML = '-';
             this.querySelector(".dry").innerHTML = '-';
-            /*this.querySelector(".remaining span").style.display = 'none';*/
+            this.querySelector(".remaining span").style.display = 'none';
             this.querySelector("ha-icon").style.color = "#5e467b";
             this.querySelector(".error").style.display = 'none';
             this.querySelector('.info').style.display = 'none';
