@@ -136,7 +136,7 @@ class ContentCardExample extends HTMLElement {
                                 <span style="color: #FFFFFF; position: absolute; right: 33%;"></span>
                             </div>
                             <div class="remaining" style="display: flex; align-items: center; justify-content: center;">
-                                <span><strong>${state.attributes["remain_time"]}</strong> para terminar</span>
+                                <span><strong></strong> para terminar</span>
                             </div>*/
                         </div>
                     </div>
