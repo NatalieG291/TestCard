@@ -22,7 +22,7 @@ class ContentCardExample extends HTMLElement {
         var icon = state.attributes["icon"];
         if (!this.content) {
             this.innerHTML = `
-                <ha-card style="background: rgba(51,40,77,0.3) !important;">
+                <ha-card style="background: rgba(51,40,77,0.3) !important; backdrop-filter: blur(5px);">
                     <div class="main">
                         <ha-icon icon="${icon}"></ha-icon>
                         <div class="off">
@@ -183,13 +183,13 @@ class ContentCardExample extends HTMLElement {
 
                 // codigos de error
                 if (errorMsg == 'IE') {
-                    errorDesc = 'La presión de agua no es suficiente, revisa el suministro de agua y que la manguera no esté obstruida.';
+                    errorDesc = 'La presiÃ³n de agua no es suficiente, revisa el suministro de agua y que la manguera no estÃ© obstruida.';
                 }
                 if (errorMsg == '0E') {
                     errorDesc = 'El agua no se esta drenando correctamente o demasiado lento, revisa que la manguera de drenaje no este obstruida o torcida.';
                 }
                 if (errorMsg == 'UE') {
-                    errorDesc = 'hay un error de desequilibrio, la ropa podria estar demasiado humeda o la carga es demasiado pequeña, reorganiza la ropa, quita o agrega peso segun la ropa que estes lavando para equilibrar la carga.';
+                    errorDesc = 'hay un error de desequilibrio, la ropa podria estar demasiado humeda o la carga es demasiado pequeÃ±a, reorganiza la ropa, quita o agrega peso segun la ropa que estes lavando para equilibrar la carga.';
                 }
                 if (errorMsg == 'tE') {
                     errorDesc = 'Hay un error de control, llama a soporte tecnico.';
