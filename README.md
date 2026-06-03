@@ -1,5 +1,14 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 
+# Laundry card (tested on LG washer)
+# Works with integration SmartThinQ LGE Sensors [![ha-smartthinq-sensors](https://github.com/ollo69/ha-smartthinq-sensors)
+
+Different status, progress, spin speed, water temp, current course, run state, etc.
+![washer status](img/washer-status.png)
+
+Show error codes and error descriptions
+![washer errors](img/washer-errors.png)
+
 # Toggle Card to HACS
 
 ![new repository in HACS](img/title-image.png)
