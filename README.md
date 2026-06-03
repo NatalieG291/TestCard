@@ -7,6 +7,7 @@ Different status, progress, spin speed, water temp, current course, run state, e
 ![washer status](img/washer-status.png)
 
 Show error codes and error descriptions
+
 ![washer errors](img/washer-errors.png)
 
 # Toggle Card to HACS
