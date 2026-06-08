@@ -158,6 +158,9 @@ class ContentCardExample extends HTMLElement {
             currentCourseSpan: this.querySelector(".estado strong"),
             errorMsgCode: this.querySelector(".errorMsg strong"),
         };
+
+        // Establece el tamaño del icono principal
+        this.elementRefs.icon.style.setProperty("--mdc-icon-size", "95%");
     }
 
     updateCard(state) {
