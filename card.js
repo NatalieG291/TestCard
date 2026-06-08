@@ -1,302 +1,292 @@
 class ContentCardExample extends HTMLElement {
-    // Whenever the state changes, a new `hass` object is set. Use this to
-    // update your content.
+    constructor() {
+        super();
+        this.previousState = null;
+        this.previousAttributes = {};
+        this.elementRefs = {};
+    }
 
     set hass(hass) {
-        // Initialize the content if it's not there yet.
         const entityId = this.config.entity;
         const state = hass.states[entityId];
-        const stateStr = state ? state.state : "unavailable";
-        const friendlyName = state.attributes["friendly_name"] || state.entity_id;
+        
+        if (!state) return;
 
-        const runState = state.attributes["run_state"] || state.entity_id;
-        const currentCourse = state.attributes["current_course"] || state.entity_id;
-        const temp = state.attributes["water_temp"] || state.entity_id;
-        const rinse = state.attributes["rinse_mode"] || state.entity_id;
-        const spin = state.attributes["spin_speed"] || state.entity_id;
-        const pre = state.attributes["pre_wash"] || state.entity_id;
-        const dry = state.attributes["dry_level"] || state.entity_id;
-        const error = state.attributes["error_state"] || state.entity_id;
-        const errorMsg = state.attributes["error_message"] || state.entity_id;
-        var errorDesc = '';
-        var icon = state.attributes["icon"];
-        if (!this.content) {
-            this.innerHTML = `
-                <ha-card style="background: rgba(51,40,77,0.3) !important; backdrop-filter: blur(5px);">
-                    <div class="main">
-                        <ha-icon icon="${icon}"></ha-icon>
-                        <div class="off">
-                            <div class="estadoOff" style="padding: 5px;">
-                                <span style="font: normal normal 20px Roboto,sans-serif !important;">
-                                  
-                                </span>
-                            </div>
-                            <div style="display: flex; align-items: center; justify-content: center;">
-                                <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        <span></span>
-                                    </li>
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        <span style="font: normal normal 20px Roboto,sans-serif !important;><strong>Apagado</strong></span>
-                                    </li>
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        <span></span>
-                                    </li>
-                                </ul>
-                            </div>
+        // Verifica si realmente cambió algo
+        if (this.hasStateChanged(state)) {
+            // Solo inicializa si no existe el DOM
+            if (!this.elementRefs.main) {
+                this.initializeDOM(state);
+            }
+            
+            // Actualiza solo lo que cambió
+            this.updateCard(state);
+            this.previousState = state.state;
+            this.previousAttributes = { ...state.attributes };
+        }
+    }
+
+    hasStateChanged(state) {
+        if (!this.previousState || this.previousState !== state.state) {
+            return true;
+        }
+        
+        // Verifica cambios en atributos críticos
+        const criticalAttrs = ['run_state', 'current_course', 'error_state', 'remain_time', 'initial_time'];
+        return criticalAttrs.some(attr => 
+            this.previousAttributes[attr] !== state.attributes[attr]
+        );
+    }
+
+    initializeDOM(state) {
+        const icon = state.attributes["icon"] || "mdi:washing-machine";
+        
+        this.innerHTML = `
+            <ha-card style="background: rgba(51,40,77,0.3) !important; backdrop-filter: blur(5px);">
+                <div class="main" style="display: grid; grid-template-columns: 33% 64%;">
+                    <ha-icon icon="${icon}"></ha-icon>
+                    
+                    <div class="off" style="display: none;">
+                        <div class="estadoOff" style="padding: 5px;">
+                            <span style="font: normal normal 20px Roboto,sans-serif !important;"></span>
                         </div>
-                        <div class="error">
-                            <div class="estadoErr" style="padding: 5px;">
-                                <span style="font: normal normal 20px Roboto,sans-serif !important;">
-                                  Ocurrio un problema
-                                </span>
-                            </div>
-                            <div style="display: flex; align-items: center; justify-content: center;">
-                                <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        <span></span>
-                                    </li>
-                                    <li class="errorMsg" style="vertical-align: middle; text-align: center;">
-                                        <span>Codigo de error <strong>${errorMsg}</strong></span>
-                                    </li>
-                                    <li class="errorDesc" style="vertical-align: middle; text-align: center;">
-                                        <span><strong>${errorDesc}</strong></span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="info">
-                            <div class="estado" style="padding: 5px;">
-                                <span style="font: normal normal 20px Roboto,sans-serif !important;">
-                                  Ciclo actual <strong>${state.attributes["current_course"]}</strong> | ${state.attributes["run_state"]}
-                                </span>
-                            </div>
-                            <div style="display: flex; align-items: center; justify-content: center;">
-                                <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        <ha-icon icon="mdi:water-thermometer"></ha-icon>
-                                    </li>
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        Temperatura
-                                    </li>
-                                    <li class="temp" style="vertical-align: middle; text-align: center;">
-                                        <span><strong>${temp}</strong></span>
-                                    </li>
-                                </ul>
-                                <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        <ha-icon icon="mdi:waves"></ha-icon>
-                                    </li>
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        Enjuague
-                                    </li>
-                                    <li class="rinse" style="vertical-align: middle; text-align: center;">
-                                        <span><strong>${rinse}</strong></span>
-                                    </li>
-                                </ul>
-                                <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        <ha-icon icon="mdi:weather-hurricane"></ha-icon>
-                                    </li>
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        Centrifugado
-                                    </li>
-                                    <li class="spin" style="vertical-align: middle; text-align: center;">
-                                        <span><strong>${spin}</strong></span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div style="display: flex; align-items: center; justify-content: center;">
-                                <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        <ha-icon icon="mdi:water-opacity"></ha-icon>
-                                    </li>
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        Pre-Lavado
-                                    </li>
-                                    <li class="pre" style="vertical-align: middle; text-align: center;">
-                                        <span><strong>${pre}</strong></span>
-                                    </li>
-                                </ul>
-                                <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        <ha-icon icon="mdi:sun-clock"></ha-icon>
-                                    </li>
-                                    <li style="vertical-align: middle; text-align: center;">
-                                        Secado
-                                    </li>
-                                    <li class="dry" style="vertical-align: middle; text-align: center;">
-                                        <span><strong>${dry}</strong></span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="progress-wrapper" style="height: 20px; width: 100%; border-radius: 10px 10px 10px 10px;">
-                                <div class="progress" style="display: inline-block; height: 20px; border-radius: 10px 10px 10px 10px;">
-                                </div>
-                                <span style="color: #FFFFFF; position: absolute; right: 33%;"></span>
-                            </div>
-                            <div class="remaining" style="display: flex; align-items: center; justify-content: center;">
-                                <span><strong>${state.attributes["remain_time"]}</strong> para terminar</span>
-                            </div>
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
+                                <li style="vertical-align: middle; text-align: center;"><span></span></li>
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <span style="font: normal normal 20px Roboto,sans-serif !important;"><strong>Apagado</strong></span>
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;"><span></span></li>
+                            </ul>
                         </div>
                     </div>
-                </ha-card>
-            `;
-            this.querySelector(".main").style.display = "grid";
-            this.querySelector(".main").style.gridTemplateColumns = "33% 64%";
-            this.querySelector("ha-icon").style.setProperty("--mdc-icon-size", "95%");
-        }
-        if (state.state == "on") {
-            const totalTime = state.attributes["initial_time"];
-            const remainTime = state.attributes["remain_time"];
-            const totalMinutes = (parseInt(totalTime.split(":")[0]) * 60) + parseInt(totalTime.split(":")[1]);
-            const remainMinutes = (parseInt(remainTime.split(":")[0]) * 60) + parseInt(remainTime.split(":")[1]);
-            const countdownTime = state.attributes["countdown_time"];
-            this.querySelector(".progress-wrapper").style.backgroundColor = "#5e467b";
-            this.querySelector(".progress").style.backgroundColor = "#c290ff";
-            this.querySelector(".off").style.display = 'none';
-            this.querySelector(".error").style.display = 'none';
-            this.querySelector(".info").style.display = 'block';
-            icon = 'mdi:washing-machine';
 
-            if (runState == 'Reposo') {
-                this.querySelector(".progress-wrapper span").innerHTML = 'En espera';
-                this.querySelector(".remaining span").style.display = 'none';
-                this.querySelector(".estado span").innerHTML = runState;
-            }
-            else {
-                this.querySelector(".estado span").innerHTML = 'Ciclo actual <strong>' + currentCourse + '</strong> | ' + runState;
-                this.querySelector(".progress").style.width = (totalMinutes - remainMinutes) / totalMinutes * 100 + "%";
-                this.querySelector(".progress-wrapper span").innerHTML = Math.round((totalMinutes - remainMinutes) / totalMinutes * 100) + "%";
-                this.querySelector(".remaining span").style.display = 'flex';
-                this.querySelector(".off").style.display = 'none';
-                this.querySelector(".info").style.display = 'block';
-            }
+                    <div class="error" style="display: none; color: white;">
+                        <div class="estadoErr" style="padding: 5px;">
+                            <span style="font: normal normal 20px Roboto,sans-serif !important;">Ocurrio un problema</span>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
+                                <li style="vertical-align: middle; text-align: center;"><span></span></li>
+                                <li class="errorMsg" style="vertical-align: middle; text-align: center;">
+                                    <span>Codigo de error <strong></strong></span>
+                                </li>
+                                <li class="errorDesc" style="vertical-align: middle; text-align: center;">
+                                    <span><strong></strong></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
-            // error
-            if (error == 'on')  {
-                this.querySelector(".estadoErr span").innerHTML = friendlyName + ' se detuvo por un problema';
-                this.querySelector(".error").style.display = 'block';
-                this.querySelector(".info").style.display = 'none';
-                this.querySelector(".error").style.color = 'white';
-                icon = 'mdi:washing-machine-alert';
+                    <div class="info" style="display: none;">
+                        <div class="estado" style="padding: 5px;">
+                            <span style="font: normal normal 20px Roboto,sans-serif !important;">
+                                Ciclo actual <strong></strong> | <span class="runStateSpan"></span>
+                            </span>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <ha-icon icon="mdi:water-thermometer"></ha-icon>
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">Temperatura</li>
+                                <li class="temp" style="vertical-align: middle; text-align: center;"><span></span></li>
+                            </ul>
+                            <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <ha-icon icon="mdi:waves"></ha-icon>
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">Enjuague</li>
+                                <li class="rinse" style="vertical-align: middle; text-align: center;"><span></span></li>
+                            </ul>
+                            <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <ha-icon icon="mdi:weather-hurricane"></ha-icon>
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">Centrifugado</li>
+                                <li class="spin" style="vertical-align: middle; text-align: center;"><span></span></li>
+                            </ul>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: center;">
+                            <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <ha-icon icon="mdi:water-opacity"></ha-icon>
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">Pre-Lavado</li>
+                                <li class="pre" style="vertical-align: middle; text-align: center;"><span></span></li>
+                            </ul>
+                            <ul style="list-style: none; align-items: center; margin: 0; padding: 5px;">
+                                <li style="vertical-align: middle; text-align: center;">
+                                    <ha-icon icon="mdi:sun-clock"></ha-icon>
+                                </li>
+                                <li style="vertical-align: middle; text-align: center;">Secado</li>
+                                <li class="dry" style="vertical-align: middle; text-align: center;"><span></span></li>
+                            </ul>
+                        </div>
+                        <div class="progress-wrapper" style="height: 20px; width: 100%; border-radius: 10px; position: relative;">
+                            <div class="progress" style="display: inline-block; height: 20px; border-radius: 10px;"></div>
+                            <span style="color: #FFFFFF; position: absolute; right: 33%;"></span>
+                        </div>
+                        <div class="remaining" style="display: flex; align-items: center; justify-content: center;">
+                            <span><strong></strong> para terminar</span>
+                        </div>
+                    </div>
+                </div>
+            </ha-card>
+        `;
 
-                // codigos de error
-                if (errorMsg == 'IE') {
-                    errorDesc = 'La presión de agua no es suficiente, revisa el suministro de agua y que la manguera no esté obstruida.';
-                }
-                if (errorMsg == '0E') {
-                    errorDesc = 'El agua no se esta drenando correctamente o demasiado lento, revisa que la manguera de drenaje no este obstruida o torcida.';
-                }
-                if (errorMsg == 'UE') {
-                    errorDesc = 'hay un error de desequilibrio, la ropa podria estar demasiado humeda o la carga es demasiado pequeña, reorganiza la ropa, quita o agrega peso segun la ropa que estes lavando para equilibrar la carga.';
-                }
-                if (errorMsg == 'tE') {
-                    errorDesc = 'Hay un error de control, llama a soporte tecnico.';
-                }
-                if (errorMsg == 'LE') {
-                    errorDesc = 'El motor esta sobrecargado, espera 30 minutos hasta que el motor se enfrie y luego, reinicia el ciclo.';
-                }
-                if (errorMsg == 'FE') {
-                    errorDesc = 'Hay un error de derrame, la lavadora se esta llenando porque la valvula esta fallando, cierra la llave de agua, desenchufa la lavadora y llama a soporte tecnico.';
-                }
-                if (errorMsg == 'PE') {
-                    errorDesc = 'El sensor de nivel de agua no funciona correctamente, cierra la llave de agua, desenchufa la lavadora y llama a soporte tecnico.';
-                }
-                if(errorMsg == 'u5') {
-                    errorDesc = 'Hay un error en el sensor de vibracion, cierra la llave de agua, desenchufa la lavadora y llama a soporte tecnico.';
-                }
-                if (errorMsg == 'FF') {
-                    errorDesc = 'hay un fallo por congelacion, revisa si la manguera de agua o drenaje se encuentran congeladas, suministra agua caliente en el tambor para descongelar la manguera de drenaje y la bombra de drenaje. Cubre la manguera de drenaje con una toalla humeda y caliente.';
-                }
-                if (errorMsg == 'AE') {
-                    errorDesc = 'hay una fuga de agua, llama a soporte tecnico.';
-                }
-                if (errorMsg == 'PF') {
-                    errorDesc = 'Fallo por corte electrico, inicia nuevamente el ciclo que estabas ejecutando.';
-                }
-                if (errorMsg == 'dHE') {
-                    errorDesc = 'hay un error de secado, llama a soporte tecnico.';
-                }
-                if (errorMsg == 'dE1') {
-                    errorDesc = 'Revisa el cierre correcto de la tapa.';
-                }
-                if (errorMsg == 'dE') {
-                    errorDesc = 'Revisa el cierre correcto de la tapa.';
-                }
-                if (errorMsg == 'dE2') {
-                    errorDesc = 'Revisa el cierre correcto de la tapa.';
-                }
-                if (errorMsg == 'dE4') {
-                    errorDesc = 'Revisa el cierre correcto de la tapa.';
-                }
-
-                this.querySelector(".errorMsg span").innerHTML = 'Codigo de error - <strong>' + errorMsg + '</strong>';
-                this.querySelector(".errorDesc span").innerHTML = errorDesc;
-            }
-            // temp water
-            if (temp == 'Sin seleccionar') {
-                this.querySelector(".temp span").innerHTML = '-';
-            }
-            else {
-                this.querySelector(".temp span").innerHTML = '<strong>' + temp + '</strong>';
-            }
-            // rinse mode
-            if (rinse == 'Sin seleccionar') {
-                this.querySelector(".rinse span").innerHTML = '-';
-            }
-            else {
-                this.querySelector(".rinse span").innerHTML = '<strong>' + rinse + '</strong>';
-            }
-            // spin speed
-            if (spin == 'Sin seleccionar') {
-                this.querySelector(".spin span").innerHTML = '-';
-            }
-            else {
-                this.querySelector(".spin span").innerHTML = '<strong>' + spin + '</strong>';
-            }
-            // pre wash
-            if (pre == 'off') {
-                this.querySelector(".pre span").innerHTML = '-';
-            }
-            else {
-                this.querySelector(".pre span").innerHTML = '<strong>' + pre + '</strong>';
-            }
-            // dry level
-            if (dry == 'Sin seleccionar') {
-                this.querySelector(".dry span").innerHTML = '-';
-            }
-            else {
-                this.querySelector(".dry span").innerHTML = '<strong>' + dry + '</strong>';
-            }
-
-            this.querySelector("ha-icon").style.color = "#c290ff";
-        }
-        else {
-            icon = 'mdi:washing-machine-off';
-            this.querySelector(".estado span").innerHTML = '';
-            this.querySelector(".temp").innerHTML = '-';
-            this.querySelector(".rinse").innerHTML = '-';
-            this.querySelector(".spin").innerHTML = '-';
-            this.querySelector(".pre").innerHTML = '-';
-            this.querySelector(".dry").innerHTML = '-';
-            this.querySelector(".remaining span").style.display = 'none';
-            this.querySelector("ha-icon").style.color = "#5e467b";
-            this.querySelector(".error").style.display = 'none';
-            this.querySelector('.info').style.display = 'none';
-            this.querySelector(".off").style.display = 'block';
-        }
-
-        //this.content.innerHTML = ``;
+        // Cache de referencias
+        this.elementRefs = {
+            main: this.querySelector(".main"),
+            icon: this.querySelector("ha-icon"),
+            off: this.querySelector(".off"),
+            error: this.querySelector(".error"),
+            info: this.querySelector(".info"),
+            estado: this.querySelector(".estado span"),
+            errorMsg: this.querySelector(".errorMsg strong"),
+            errorDesc: this.querySelector(".errorDesc strong"),
+            temp: this.querySelector(".temp span"),
+            rinse: this.querySelector(".rinse span"),
+            spin: this.querySelector(".spin span"),
+            pre: this.querySelector(".pre span"),
+            dry: this.querySelector(".dry span"),
+            progress: this.querySelector(".progress"),
+            progressWrapper: this.querySelector(".progress-wrapper"),
+            progressText: this.querySelector(".progress-wrapper span"),
+            remaining: this.querySelector(".remaining span"),
+            runStateSpan: this.querySelector(".runStateSpan"),
+            currentCourseSpan: this.querySelector(".estado strong"),
+            errorMsgCode: this.querySelector(".errorMsg strong"),
+        };
     }
+
+    updateCard(state) {
+        const stateStr = state.state;
+        const friendlyName = state.attributes["friendly_name"] || state.entity_id;
+        const runState = state.attributes["run_state"] || "";
+        const currentCourse = state.attributes["current_course"] || "";
+        const temp = state.attributes["water_temp"] || "";
+        const rinse = state.attributes["rinse_mode"] || "";
+        const spin = state.attributes["spin_speed"] || "";
+        const pre = state.attributes["pre_wash"] || "";
+        const dry = state.attributes["dry_level"] || "";
+        const error = state.attributes["error_state"] || "";
+        const errorMsg = state.attributes["error_message"] || "";
+
+        if (stateStr === "on") {
+            this.updateOnState(state, friendlyName, runState, currentCourse, temp, rinse, spin, pre, dry, error, errorMsg);
+        } else {
+            this.updateOffState();
+        }
+    }
+
+    updateOnState(state, friendlyName, runState, currentCourse, temp, rinse, spin, pre, dry, error, errorMsg) {
+        this.elementRefs.off.style.display = 'none';
+        this.elementRefs.icon.style.color = "#c290ff";
+        this.elementRefs.icon.setAttribute('icon', 'mdi:washing-machine');
+
+        if (error === 'on') {
+            this.elementRefs.error.style.display = 'block';
+            this.elementRefs.info.style.display = 'none';
+            this.elementRefs.icon.setAttribute('icon', 'mdi:washing-machine-alert');
+            this.elementRefs.errorMsg.textContent = `${friendlyName} se detuvo por un problema`;
+            this.elementRefs.errorDesc.textContent = this.getErrorDescription(errorMsg);
+            this.elementRefs.errorMsgCode.textContent = errorMsg;
+        } else {
+            this.elementRefs.error.style.display = 'none';
+            this.elementRefs.info.style.display = 'block';
+
+            if (runState === 'Reposo') {
+                this.elementRefs.progressText.textContent = 'En espera';
+                this.elementRefs.estado.innerHTML = `Ciclo actual <strong>${currentCourse}</strong> | ${runState}`;
+                this.elementRefs.remaining.style.display = 'none';
+            } else {
+                const totalTime = state.attributes["initial_time"] || "0:0";
+                const remainTime = state.attributes["remain_time"] || "0:0";
+                const totalMinutes = this.timeToMinutes(totalTime);
+                const remainMinutes = this.timeToMinutes(remainTime);
+                const progress = (totalMinutes - remainMinutes) / totalMinutes * 100;
+
+                this.elementRefs.progress.style.width = progress + "%";
+                this.elementRefs.progressText.textContent = Math.round(progress) + "%";
+                this.elementRefs.estado.innerHTML = `Ciclo actual <strong>${currentCourse}</strong> | ${runState}`;
+                this.elementRefs.remaining.innerHTML = `<strong>${remainTime}</strong> para terminar`;
+                this.elementRefs.remaining.style.display = 'flex';
+            }
+
+            // Actualiza valores dinámicos
+            this.updateAttributeDisplay('temp', temp, 'Sin seleccionar');
+            this.updateAttributeDisplay('rinse', rinse, 'Sin seleccionar');
+            this.updateAttributeDisplay('spin', spin, 'Sin seleccionar');
+            this.updateAttributeDisplay('pre', pre, 'off');
+            this.updateAttributeDisplay('dry', dry, 'Sin seleccionar');
+
+            this.elementRefs.progressWrapper.style.backgroundColor = "#5e467b";
+            this.elementRefs.progress.style.backgroundColor = "#c290ff";
+        }
+    }
+
+    updateOffState() {
+        this.elementRefs.info.style.display = 'none';
+        this.elementRefs.error.style.display = 'none';
+        this.elementRefs.off.style.display = 'block';
+        this.elementRefs.icon.style.color = "#5e467b";
+        this.elementRefs.icon.setAttribute('icon', 'mdi:washing-machine-off');
+        
+        // Limpia valores
+        this.elementRefs.temp.textContent = '-';
+        this.elementRefs.rinse.textContent = '-';
+        this.elementRefs.spin.textContent = '-';
+        this.elementRefs.pre.textContent = '-';
+        this.elementRefs.dry.textContent = '-';
+        this.elementRefs.remaining.style.display = 'none';
+    }
+
+    updateAttributeDisplay(className, value, skipValue) {
+        const element = this.elementRefs[className];
+        if (value === skipValue || value === '') {
+            element.textContent = '-';
+        } else {
+            element.textContent = value;
+        }
+    }
+
+    timeToMinutes(timeStr) {
+        if (!timeStr || typeof timeStr !== 'string') return 0;
+        const parts = timeStr.split(':');
+        return (parseInt(parts[0]) || 0) * 60 + (parseInt(parts[1]) || 0);
+    }
+
+    getErrorDescription(errorMsg) {
+        const errorMap = {
+            'IE': 'La presión de agua no es suficiente, revisa el suministro de agua y que la manguera no esté obstruida.',
+            '0E': 'El agua no se esta drenando correctamente o demasiado lento, revisa que la manguera de drenaje no este obstruida o torcida.',
+            'UE': 'Hay un error de desequilibrio, la ropa podria estar demasiado humeda o la carga es demasiado pequeña, reorganiza la ropa.',
+            'tE': 'Hay un error de control, llama a soporte tecnico.',
+            'LE': 'El motor esta sobrecargado, espera 30 minutos hasta que el motor se enfrie y luego, reinicia el ciclo.',
+            'FE': 'Hay un error de derrame, la lavadora se esta llenando porque la valvula esta fallando, desenchufa la lavadora y llama a soporte tecnico.',
+            'PE': 'El sensor de nivel de agua no funciona correctamente, desenchufa la lavadora y llama a soporte tecnico.',
+            'u5': 'Hay un error en el sensor de vibracion, desenchufa la lavadora y llama a soporte tecnico.',
+            'FF': 'Hay un fallo por congelacion, revisa si la manguera de agua o drenaje se encuentran congeladas.',
+            'AE': 'Hay una fuga de agua, llama a soporte tecnico.',
+            'PF': 'Fallo por corte electrico, inicia nuevamente el ciclo que estabas ejecutando.',
+            'dHE': 'Hay un error de secado, llama a soporte tecnico.',
+            'dE1': 'Revisa el cierre correcto de la tapa.',
+            'dE': 'Revisa el cierre correcto de la tapa.',
+            'dE2': 'Revisa el cierre correcto de la tapa.',
+            'dE4': 'Revisa el cierre correcto de la tapa.',
+        };
+        return errorMap[errorMsg] || 'Error desconocido';
+    }
+
     static getConfigElement() {
         return document.createElement("content-card-editor");
     }
+
     static getStubConfig() {
-        return { entity: "sun.sun" }
+        return { entity: "sun.sun" };
     }
-    // The user supplied configuration. Throw an exception and Home Assistant
-    // will render an error card.
+
     setConfig(config) {
         if (!config.entity) {
             throw new Error("You need to define an entity");
@@ -304,13 +294,10 @@ class ContentCardExample extends HTMLElement {
         this.config = config;
     }
 
-    // The height of your card. Home Assistant uses this to automatically
-    // distribute all cards over the available columns in masonry view
     getCardSize() {
         return 3;
     }
 
-    // The rules for sizing your card in the grid in sections view
     getLayoutOptions() {
         return {
             grid_rows: 3,
@@ -327,8 +314,7 @@ window.customCards = window.customCards || [];
 window.customCards.push({
     type: "content-card-example",
     name: "Content Card",
-    preview: false, // Optional - defaults to false
-    description: "A custom card made by me!", // Optional
-    documentationURL:
-        "https://developers.home-assistant.io/docs/frontend/custom-ui/custom-card", // Adds a help link in the frontend card editor
+    preview: false,
+    description: "A custom card made by me!",
+    documentationURL: "https://developers.home-assistant.io/docs/frontend/custom-ui/custom-card",
 });
